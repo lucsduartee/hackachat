@@ -1,0 +1,18 @@
+version: '3'
+services:
+  hackaback:
+    build:
+      context: ./hackaback
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/code
+  hackafront:
+    build:
+      context: ./hackafront
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./hackafront:/app
