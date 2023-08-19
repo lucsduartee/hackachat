@@ -1,0 +1,6 @@
+fastapi[all]
+pandas
+numpy
+openai
+pytest
+python-dotenv
