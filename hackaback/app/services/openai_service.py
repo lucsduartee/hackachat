@@ -1,7 +1,7 @@
 import json
 import openai
 from ..configs.env_config import get_env
-from ..utils.constants import ( SYSTEM_RANDOM_BEHAVIOR, SYSTEM_CONVERSATION_BEHAVIOR, BASE_PROMPT, SYSTEM_RECOMENDATION_BEHAVIOR )
+from ..utils.constants import ( SYSTEM_RANDOM_BEHAVIOR, SYSTEM_CONVERSATION_BEHAVIOR, BASE_PROMPT, SYSTEM_RECOMENDATION_BEHAVIOR, SYSTEM_CONCLUSION_BEHAVIOR )
 from ..utils.utils import get_real_prompt
 from openai.embeddings_utils import ( get_embedding, cosine_similarity )
 from .data_service import DataService
@@ -18,30 +18,29 @@ class OpenAIService:
     #     return self.__get_intentions(messages, SYSTEM_CLASSIFIER_BEHAVIOR)
 
     def __check_intentions(self, messages):
-        response = self.__get_intentions(messages, BASE_PROMPT)
+        
+        response = self.__get_intentions(get_real_prompt(BASE_PROMPT, messages))
 
-        print('aquiii', response)
-
-        intent = response["intent"]
-
-        print('aquiii', response)
+        intent = json.loads(response)["intent"]
 
         if intent == "0":
-            return self.__get_intentions(messages, SYSTEM_RANDOM_BEHAVIOR)
-        if intent == "1":
-            return self.__get_intentions(messages, SYSTEM_CONVERSATION_BEHAVIOR)
-        if intent == "2":
-            return self.__get_intentions(messages, SYSTEM_RECOMENDATION_BEHAVIOR)
+            return self.__get_intentions(get_real_prompt(SYSTEM_RANDOM_BEHAVIOR, messages))
+        elif intent == "1":
+            return self.__get_intentions(get_real_prompt(SYSTEM_CONVERSATION_BEHAVIOR, messages))
+        elif intent == "2":
+            return self.__get_intentions(get_real_prompt(SYSTEM_RECOMENDATION_BEHAVIOR, messages))
+        elif intent == "3":
+            return self.__get_intentions(get_real_prompt(SYSTEM_CONCLUSION_BEHAVIOR, messages))
             
 
     def get_course_itentions(self, messages):
         return self.__get_intentions(messages, BASE_PROMPT)
 
-    def __get_intentions(self, messages_conversation, system_behavior):
+    def __get_intentions(self, messages_conversation):
         response = openai.ChatCompletion.create(
             model = self.completion_model,
             messages = [
-                { "role": "system", "content": system_behavior },
+                { "role": "system", "content": "Você é um assistente prestativo, retorne um json para cada respota" },
                 { "role": "user",  "content": messages_conversation }
             ]
         )
@@ -72,7 +71,7 @@ class OpenAIService:
 
             res_gpt = json.loads(res_gpt)
             
-            if (res_gpt["intent"]) == "2":
+            if (res_gpt["intent"]) == "3":
                 course_keywords_concat = ', '.join(res_gpt['keywords'])
                 courses = self.get_courses(course_keywords_concat)
                 return { "answer": res_gpt["chat_response"], "courses": courses }

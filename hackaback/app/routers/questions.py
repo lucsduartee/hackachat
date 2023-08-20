@@ -11,7 +11,7 @@ router = APIRouter(
 
 @router.post("/")
 async def create_question(question: Question):
-    response = openai_service.get_response(question.text)
+    response = openai_service.get_response(question.messages)
     
     if response:
         return { "data": response }
