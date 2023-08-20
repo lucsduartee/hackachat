@@ -9,14 +9,14 @@ class OpenAIService:
         self.completion_model = get_env("OPENAI_API_COMPLETION_MODEL")
         self.embedding_model = get_env("OPENAI_API_EMBEDDING_MODEL")
 
-    def get_classified_itentions(self, text):
-        return self.__get_intentions(text, SYSTEM_CLASSIFIER_BEHAVIOR)
+    # def get_classified_itentions(self, messages):
+    #     return self.__get_intentions(messages, SYSTEM_CLASSIFIER_BEHAVIOR)
 
-    def get_course_itentions(self, text):
-        return self.__get_intentions(text, SYSTEM_COURSES_BEHAVIOR)
+    def get_course_itentions(self, messages):
+        return self.__get_intentions(messages, SYSTEM_COURSES_BEHAVIOR)
 
-    def __get_intentions(self, text, system_behavior):
-        prompt = get_real_prompt(system_behavior, text)
+    def __get_intentions(self, messages, system_behavior):
+        prompt = get_real_prompt(system_behavior, messages)
         response = openai.ChatCompletion.create(
             model = self.completion_model,
             messages = [
@@ -27,9 +27,9 @@ class OpenAIService:
         
         return response["choices"][0]["message"]["content"]
     
-    def get_response(self, text):
+    def get_response(self, messages):
         try:
-            return self.get_course_itentions(text)
+            return self.get_course_itentions(messages)
         except Exception as e:
             print(e)
             return None
