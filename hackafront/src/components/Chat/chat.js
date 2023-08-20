@@ -95,16 +95,19 @@ export default function Chat() {
       justifyContent="space-between"
       sx={{
         height: '100%',
+        borderRadius: '30px',
       }}
     >
       <Grid
         item
         sx={{
           overflow: 'auto',
+          backgroundColor: '#e8f1f2',
+          borderRadius: '10px',
         }}
         maxHeight={{ xs: '70%', md: '75%' }}
       >
-        <List sx={{ padding: 0}}>
+        <List sx={{ padding: 0 }}>
           {messages.map(({ author, content }, index) => (
             <ListItem key={index} sx={isGPTMessage(author) ? sxGPT : sxUser}>
               <Grid container>
@@ -125,6 +128,7 @@ export default function Chat() {
             container
             justifyContent="space-between"
             maxHeight={{ xs: '30%', md: '25%' }}
+            sx={{ padding: '10px' }}
           >
             <Grid item sx={{ width: "80%"}}>
               <TextField
@@ -133,6 +137,7 @@ export default function Chat() {
                 value={message}
                 fullWidth
                 color={validMessage ? 'primary' : 'error'}
+                sx={{ backgroundColor: '#fff'}}
               />
             </Grid>
             <Grid
