@@ -4,7 +4,6 @@ import {
   ListItem,
   Grid,
   ListItemText,
-  Divider,
   TextField,
   Fab,
 } from "@mui/material";
@@ -26,29 +25,46 @@ export default function Chat() {
   const isGPTMessage = (author) => author === 'gpt';
 
   return (
-    <Grid item>
-      <List>
-        {messages.map(({ author, content }, index) => (
-          <ListItem key={index} sx={isGPTMessage(author) ? sxGPT : sxUser}>
-            <Grid container>
-              <Grid item xs={12}>
-                <ListItemText align={isGPTMessage(author) ? 'left' : 'right'} primary={content} />
+    <Grid
+      container
+      direction="column"
+      justifyContent="space-between"
+      sx={{
+        height: '100%',
+      }}
+    >
+      <Grid
+        item
+        sx={{
+          overflow: 'auto',
+        }}
+        maxHeight={{ xs: '80%', md: '85%' }}
+      >
+        <List sx={{ padding: 0}}>
+          {messages.map(({ author, content }, index) => (
+            <ListItem key={index} sx={isGPTMessage(author) ? sxGPT : sxUser}>
+              <Grid container>
+                <Grid item xs={12}>
+                  <ListItemText align={isGPTMessage(author) ? 'left' : 'right'} primary={content} />
+                </Grid>
+                <Grid item xs={12}>
+                  <ListItemText align={isGPTMessage(author) ? 'left' : 'right'} secondary={author} />
+                </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <ListItemText align={isGPTMessage(author) ? 'left' : 'right'} secondary={author} />
-              </Grid>
-            </Grid>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
+            </ListItem>
+          ))}
+        </List>
+      </Grid>
       <Grid item>
         <form>
-          <Grid container>
-            <Grid item>
+          <Grid
+            container
+            justifyContent="space-between"
+          >
+            <Grid item sx={{ width: "80%"}}>
               <TextField label="Como posso ajudar-lhe" fullWidth />
             </Grid>
-            <Grid item>
+            <Grid xs={2} align="center" alignSelf="center">
               <Fab color="primary" aria-label="add"><SendIcon /></Fab>
             </Grid>
           </Grid>
