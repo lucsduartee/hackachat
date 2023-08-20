@@ -7,22 +7,24 @@ import {
 } from '@mui/material';
 
 
-export default function CourseCard(_course) {
+export default function CourseCard(course) {
+  const { course: courseName, tag, url, price } = course;
+  
   return (
     <Card sx={{ minWidth: 275 }}>
       <CardContent>
         <Typography variant="h5" component="div">
-          {"Course Name"}
+          {courseName}
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          {"Course Tag"}
+          {tag}
         </Typography>
         <Typography sx={{ mb: 1.5 }}>
-          {"Course Price"}
+          {price}
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">{"Course URL"}</Button>
+        <Button size="small">{url}</Button>
       </CardActions>
     </Card>
   );
