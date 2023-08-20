@@ -1,7 +1,7 @@
 import json
 import openai
 from ..configs.env_config import get_env
-from ..utils.constants import ( SYSTEM_CLASSIFIER_BEHAVIOR, SYSTEM_COURSES_BEHAVIOR, BASE_PROMPT )
+from ..utils.constants import ( SYSTEM_RANDOM_BEHAVIOR, SYSTEM_CONVERSATION_BEHAVIOR, BASE_PROMPT, SYSTEM_RECOMENDATION_BEHAVIOR )
 from ..utils.utils import get_real_prompt
 from openai.embeddings_utils import ( get_embedding, cosine_similarity )
 from .data_service import DataService
@@ -16,6 +16,23 @@ class OpenAIService:
 
     # def get_classified_itentions(self, messages):
     #     return self.__get_intentions(messages, SYSTEM_CLASSIFIER_BEHAVIOR)
+
+    def __check_intentions(self, messages):
+        response = self.__get_intentions(messages, BASE_PROMPT)
+
+        print('aquiii', response)
+
+        intent = response["intent"]
+
+        print('aquiii', response)
+
+        if intent == "0":
+            return self.__get_intentions(messages, SYSTEM_RANDOM_BEHAVIOR)
+        if intent == "1":
+            return self.__get_intentions(messages, SYSTEM_CONVERSATION_BEHAVIOR)
+        if intent == "2":
+            return self.__get_intentions(messages, SYSTEM_RECOMENDATION_BEHAVIOR)
+            
 
     def get_course_itentions(self, messages):
         return self.__get_intentions(messages, BASE_PROMPT)
@@ -51,7 +68,7 @@ class OpenAIService:
     
     def get_response(self, messages):
         try:
-            res_gpt = self.get_course_itentions(messages)
+            res_gpt = self.__check_intentions(messages)
 
             res_gpt = json.loads(res_gpt)
             

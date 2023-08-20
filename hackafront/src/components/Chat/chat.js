@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import {
   List,
   ListItem,
@@ -25,6 +25,7 @@ export default function Chat() {
     ]
   );
   const { setCourses } = useContext(globalContext);
+  const [items, setItems] = useState([]);
 
   const isGPTMessage = (author) => author === 'gpt';
 
@@ -44,6 +45,10 @@ export default function Chat() {
     setValidMessage(true);
     return true;
   };
+
+  useEffect(() => {
+    localStorage.setItem('items', JSON.stringify(items));
+  }, [items]);
 
   const submit = async (e) => {
     e.preventDefault();
