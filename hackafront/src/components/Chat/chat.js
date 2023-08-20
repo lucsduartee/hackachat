@@ -9,32 +9,23 @@ import {
 } from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
 import { globalContext } from '@/providers/GlobalProvider';
-import validator from 'email-validator';
 
 
-const sxGPT = { backgroundColor: '#b5bdd4' };
-const sxUser = { backgroundColor: '#eceef4' };
+const sxGPT = { backgroundColor: '#f2eae6' };
+// const sxUser = { backgroundColor: '#eceef4' };
 
 export default function Chat() {
   const [message, setMessage] = useState('');
   const [validMessage, setValidMessage] = useState(true);
-  const [validUser, setValidUser] = useState(false);
   const [messages, setMessages] = useState(
     [
-      { author: 'gpt', content: 'Olá, tudo bem? É um prazer poder te ajudar na sua jornada! Antes de começarmos o atendimento, poderia nos dizer o seu email' },
+      { author: 'gpt', content: 'Olá, tudo bem? Estou aqui para te ajudar a encontrar o curso perfeito. Me conta: você tem interesse em alguma área específica? Exemplo: humanas, exatas, biológicas, tecnologia...' },
     ]
   );
   const { setCourses } = useContext(globalContext);
   const [items, setItems] = useState([]);
 
   const isGPTMessage = (author) => author === 'gpt';
-
-  const isValidEmail = (email) => {
-    if (!validator.validate(email)) return false
-  
-    setValidUser(true);
-    return true;
-  };
 
   const isValidMessage = (message) => {
     if (message.length === 0) {
@@ -56,17 +47,6 @@ export default function Chat() {
     if (!isValidMessage(message)) return;
 
     setMessage('');
-
-
-    if (!validUser) {
-      if (!isValidEmail(message)) {
-        setMessages([...messages, { author: 'gpt', content: 'Email inválido, por favor digite novamente' }]);
-      } else {
-        setMessages([...messages, { author: 'gpt', content: 'Fico feliz em saber que você está interessado em fazer uma faculdade. Posso te ajudar a encontrar o curso ideal para você. Diga-me, qual é a área de conhecimento que mais desperta o seu interesse? Exatas, humanas, biológicas ou tecnológicas?' }]);
-      }
-
-      return;
-    }
 
     const response = await fetch('http://localhost:8000/questions/', {
       method: 'POST',
@@ -100,8 +80,8 @@ export default function Chat() {
       justifyContent="space-between"
       sx={{
         height: '100%',
-        borderRadius: '30px',
-        backgroundColor: '#e8f1f2',
+        borderRadius: '10px',
+        border: '1px solid #006494',
       }}
     >
       <Grid
@@ -114,7 +94,7 @@ export default function Chat() {
       >
         <List sx={{ padding: 0 }}>
           {messages.map(({ author, content }, index) => (
-            <ListItem key={index} sx={isGPTMessage(author) ? sxGPT : sxUser}>
+            <ListItem key={index} sx={isGPTMessage(author) && sxGPT}>
               <Grid container>
                 <Grid item xs={12}>
                   <ListItemText align={isGPTMessage(author) ? 'left' : 'right'} primary={content} />
@@ -137,7 +117,7 @@ export default function Chat() {
           >
             <Grid item sx={{ width: "80%"}}>
               <TextField
-                label="Como posso ajudar-lhe"
+                label="Exemplo: Gostaria de estudar na área de exatas..."
                 onChange={(e) => setMessage(e.target.value)}
                 value={message}
                 fullWidth
