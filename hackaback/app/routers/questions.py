@@ -8,4 +8,4 @@ router = APIRouter(
 
 @router.post("/")
 async def create_question(question: Question):
-    return question.text;
+    return question.text

@@ -1,8 +1,12 @@
 'use client'
 
-import * as React from "react";
-import Button from "@mui/material/Button";
+import { Grid } from "@mui/material";
+import Chat from '../../components/Chat/chat';
 
-export default function ButtonUsage() {
-  return <Button variant="contained">Hello world</Button>;
+export default function ChatPage() {
+  return (
+    <Grid>
+      <Chat />
+    </Grid>
+  );
 }
