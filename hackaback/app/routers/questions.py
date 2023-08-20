@@ -11,4 +11,9 @@ router = APIRouter(
 
 @router.post("/")
 async def create_question(question: Question):
-    return openai_service.get_response(question.messages)
+    response = openai_service.get_response(question.text)
+    
+    if response:
+        return { "data": response }
+    
+    return { "data": { "answer": "Não foi possível encontrar nenhum curso, poderia reformular a sua pergunta?" }}
