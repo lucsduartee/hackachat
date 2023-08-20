@@ -19,13 +19,13 @@ export default function Chat() {
   const [validMessage, setValidMessage] = useState(true);
   const [messages, setMessages] = useState(
     [
-      { author: 'gpt', content: 'Olá, tudo bem? Estou aqui para te ajudar a encontrar o curso perfeito. Me conta: você tem interesse em alguma área específica? Exemplo: humanas, exatas, biológicas, tecnologia...' },
+      { author: 'assistant', content: 'Olá, tudo bem? Estou aqui para te ajudar a encontrar o curso perfeito. Me conta: você tem interesse em alguma área específica? Exemplo: humanas, exatas, biológicas, tecnologia...' },
     ]
   );
   const { setCourses } = useContext(globalContext);
   const [items, setItems] = useState([]);
 
-  const isGPTMessage = (author) => author === 'gpt';
+  const isGPTMessage = (author) => author === 'assistant';
 
   const isValidMessage = (message) => {
     if (message.length === 0) {
@@ -48,13 +48,18 @@ export default function Chat() {
 
     setMessage('');
 
+    const conversationData = messages.map(m => ({
+      sender: m.author,
+      text: m.content
+    }));
+
     const response = await fetch('http://localhost:8000/questions/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        text: message,
+        messages: conversationData
       }),
     });
 
@@ -64,7 +69,7 @@ export default function Chat() {
       setCourses(data.courses);
     }
 
-    setMessages([...messages, { author: 'gpt', content: data.answer }]);
+    setMessages([...messages, { author: 'assistant', content: data.answer }]);
   };
 
   const handleClick = () => {

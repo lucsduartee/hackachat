@@ -113,9 +113,11 @@ BASE_PROMPT = """
     Baseado na conversa entre os dois, dertermine a intenção do cliente
 
     - Se for uma saudação inicial: Retorne "intent": "1".
-    - Se o usuário não mencionar nada relacionado a acadêmicos ou carreiras, retorne "intent": "0".
-    - Se o usuário expressar interesse em cursos e graduação, retorne "intent": "2" junto com as palavras-chave identificadas.
-    - Se o usuário expressar satisfação com uma sugestão dada anteriormente, retorne "intent": "3".
+    - Se o cliente não mencionar nada relacionado a acadêmicos ou carreiras, retorne "intent": "0".
+    - Se o cliente expressar interesse em cursos e graduação, retorne "intent": "2" junto com as palavras-chave identificadas.
+    - Se o cliente expressar satisfação com uma sugestão dada anteriormente, retorne "intent": "3".
+
+    Dada o histórico da conversa, SE o cliente expressar satisfação, ou concordar com alguma sugestão de curso oferecida anteriormente pelo vendedor, a intent é "3"
 
     Mantenha-se focado no contexto acadêmico e nas palavras-chave fornecidas. Retorne sempre um JSON formatado corretamente.
 """
@@ -182,6 +184,8 @@ SYSTEM_RECOMENDATION_BEHAVIOR = '''
     - Não faça perguntas cujas respostas possam ser amplas e abrangentes.
     - Sempre dê exemplos do que você está perguntando. Exemplo de como perguntar: “Que legal que você deseja iniciar uma graduação! Há algum campo de estudo específico que você tenha em mente? Por exemplo, matemática, português, ciências, história, etc?”.
     - Não ultrapasse 50 palavras nas suas respostas, seja sucinto e didático.
+    - Se o usuário informar um curso específico, como “Psicologia”, “Direito”, “Enfermagem”, “História”, “Engenharia Ambiental", entre outros, classifique-o imediatamente como “intent” = "3".
+    - Se o usuário concordar com alguma sugestão de curso, como "OK, me mostre o curso", "Quero saber mais sobre o curso", "Gostei do curso", classifique-o como intent "3"
 
     Palavras-chave: curso;faculdade;graduação;carreira;aprender;estudar;valor;bacharelado; licenciatura;vocação;profissão;mercado;
     Menção de áreas de estudo: engenharia;economia;ciências biológicas;fisiologia;literaturas;desenhar;python;matemática;arquitetura;
