@@ -50,13 +50,13 @@ class OpenAIService:
     
     def get_response(self, messages):
         try:
-            self.get_course_itentions(messages)
+            res_gpt = self.get_course_itentions(messages)
 
             res_gpt = json.loads(res_gpt)
             
             if (res_gpt["intent"]) == "2":
-                course_keywords = ', '.join(res_gpt['keywords'])
-                courses = semantic_search_service.search_course(course_keywords)
+                course_keywords_concat = ', '.join(res_gpt['keywords'])
+                courses = self.get_courses(course_keywords_concat)
                 return { "answer": res_gpt["chat_response"], "courses": courses }
 
             
