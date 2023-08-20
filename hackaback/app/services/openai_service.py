@@ -31,7 +31,7 @@ class OpenAIService:
         
         return response["choices"][0]["message"]["content"]
 
-    def get_courses(self, course_keywords_concat, n = 3):
+    def get_courses(self, course_keywords_concat, n = 5):
         try:
             df = data_service.get_df() 
             course_embedding = get_embedding(course_keywords_concat, engine=self.embedding_model)

@@ -96,13 +96,13 @@ export default function Chat() {
       sx={{
         height: '100%',
         borderRadius: '30px',
+        backgroundColor: '#e8f1f2',
       }}
     >
       <Grid
         item
         sx={{
           overflow: 'auto',
-          backgroundColor: '#e8f1f2',
           borderRadius: '10px',
         }}
         maxHeight={{ xs: '70%', md: '75%' }}

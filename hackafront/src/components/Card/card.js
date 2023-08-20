@@ -24,7 +24,7 @@ export default function CourseCard(course) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" href={url}>SAIBA MAIS</Button>
+        <Button size="small" href={url} target='_blank'>SAIBA MAIS</Button>
       </CardActions>
     </Card>
   );
