@@ -5,3 +5,7 @@ openai
 pytest
 python-dotenv
 beautifulsoup4
+matplotlib
+scipy
+scikit-learn
+plotly

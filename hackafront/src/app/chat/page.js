@@ -51,6 +51,7 @@ export default function ChatPage() {
           xs={12}
           sm={6}
           md={5}
+          maxHeight={{ xs: '50%', sm: '50%', md: '100%' }}
         >
           <Chat />
         </Grid>

@@ -14,8 +14,8 @@ embeddings_path = os.path.join(current_dir, "../resources/data.csv")
 
 class DataService:
     def __init__(self):
-        openai.api_key = get_env("OPENAI_API_KEY")
         self.embedding_model = get_env("OPENAI_API_EMBEDDING_MODEL")
+        openai.api_key = get_env("OPENAI_API_KEY")
         self.__load_df()
     
     def __load_df(self):
@@ -25,7 +25,7 @@ class DataService:
             self.df.dropna(inplace = True) # remove None
             self.df["ada_embedding"] = self.df.page_content.apply(lambda d: get_embedding(d, engine = self.embedding_model))
             self.df["ada_embedding"] = self.df["ada_embedding"].to_numpy()
-            self.df.to_csv(embeddings_path)
+            self.df.to_csv(embeddings_path, index = False)
         else:
             self.df = pd.read_csv(embeddings_path)
             self.df["ada_embedding"] = self.df["ada_embedding"].apply(eval).apply(np.array)

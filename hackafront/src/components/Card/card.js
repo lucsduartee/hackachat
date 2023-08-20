@@ -11,7 +11,7 @@ export default function CourseCard(course) {
   const { course: courseName, tag, url, price } = course;
   
   return (
-    <Card sx={{ minWidth: 275 }}>
+    <Card sx={{ maxWidth: 300 }}>
       <CardContent>
         <Typography variant="h5" component="div">
           {courseName}
@@ -20,11 +20,11 @@ export default function CourseCard(course) {
           {tag}
         </Typography>
         <Typography sx={{ mb: 1.5 }}>
-          {price}
+          R$ {price}
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">{url}</Button>
+        <Button size="small" href={url}>SAIBA MAIS</Button>
       </CardActions>
     </Card>
   );

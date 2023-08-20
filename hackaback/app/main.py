@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from .routers import questions
 from fastapi.middleware.cors import CORSMiddleware
+from .services.openai_service import DataService
+
+DataService()
 
 app = FastAPI()
 

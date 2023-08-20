@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import {
   List,
   ListItem,
@@ -8,6 +8,7 @@ import {
   Fab,
 } from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
+import { globalContext } from '@/providers/GlobalProvider';
 import validator from 'email-validator';
 
 
@@ -16,12 +17,14 @@ const sxUser = { backgroundColor: '#eceef4' };
 
 export default function Chat() {
   const [message, setMessage] = useState('');
+  const [validMessage, setValidMessage] = useState(true);
   const [validUser, setValidUser] = useState(false);
   const [messages, setMessages] = useState(
     [
       { author: 'gpt', content: 'Olá, tudo bem? É um prazer poder te ajudar na sua jornada! Antes de começarmos o atendimento, poderia nos dizer o seu email' },
     ]
   );
+  const { setCourses } = useContext(globalContext);
 
   const isGPTMessage = (author) => author === 'gpt';
 
@@ -32,17 +35,35 @@ export default function Chat() {
     return true;
   };
 
+  const isValidMessage = (message) => {
+    if (message.length === 0) {
+      setValidMessage(false);
+      return false;
+    }
+
+    setValidMessage(true);
+    return true;
+  };
+
   const submit = async (e) => {
     e.preventDefault();
+    
+    if (!isValidMessage(message)) return;
+
+    setMessage('');
+
 
     if (!validUser) {
       if (!isValidEmail(message)) {
         setMessages([...messages, { author: 'gpt', content: 'Email inválido, por favor digite novamente' }]);
-        return;
+      } else {
+        setMessages([...messages, { author: 'gpt', content: 'Fico feliz em saber que você está interessado em fazer uma faculdade. Posso te ajudar a encontrar o curso ideal para você. Diga-me, qual é a área de conhecimento que mais desperta o seu interesse? Exatas, humanas, biológicas ou tecnológicas?' }]);
       }
+
+      return;
     }
 
-    const response = await fetch('http://localhost:8000/questions', {
+    const response = await fetch('http://localhost:8000/questions/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -62,6 +83,8 @@ export default function Chat() {
   };
 
   const handleClick = () => {
+    if (!isValidMessage(message)) return;
+
     setMessages([...messages, { author: 'user', content: message }]);
   };
 
@@ -79,7 +102,7 @@ export default function Chat() {
         sx={{
           overflow: 'auto',
         }}
-        maxHeight={{ xs: '80%', md: '85%' }}
+        maxHeight={{ xs: '70%', md: '75%' }}
       >
         <List sx={{ padding: 0}}>
           {messages.map(({ author, content }, index) => (
@@ -101,6 +124,7 @@ export default function Chat() {
           <Grid
             container
             justifyContent="space-between"
+            maxHeight={{ xs: '30%', md: '25%' }}
           >
             <Grid item sx={{ width: "80%"}}>
               <TextField
@@ -108,6 +132,7 @@ export default function Chat() {
                 onChange={(e) => setMessage(e.target.value)}
                 value={message}
                 fullWidth
+                color={validMessage ? 'primary' : 'error'}
               />
             </Grid>
             <Grid
