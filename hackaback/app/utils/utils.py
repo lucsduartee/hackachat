@@ -1,14 +1,14 @@
 from .constants import JOKER_MESSAGE
 from ..schemas.question import Question
+from typing import List
+from ..schemas.message import Message
 
-def get_real_prompt(prompt: str, messages: str) -> str:
-    message = organize_messages(messages)
+def get_real_prompt(prompt: str, messages: List[Message]) -> str:
+    message = "["
+
+    for i in messages:
+        message = f'{message}{{ "role": {i.sender}, "content": {i.text} }},'
+    
+    message = f'{message}]'
 
     return prompt.replace(JOKER_MESSAGE, message)
-
-def organize_messages(messages: Question) -> str:
-    organized_message = ""
-    for message in messages:
-        organized_message = f"{organized_message}{message.sender.upper()}: {message.text}\n"
-    
-    return organized_message

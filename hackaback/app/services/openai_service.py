@@ -15,8 +15,8 @@ class OpenAIService:
     def get_course_itentions(self, messages):
         return self.__get_intentions(messages, SYSTEM_COURSES_BEHAVIOR)
 
-    def __get_intentions(self, messages, system_behavior):
-        prompt = get_real_prompt(system_behavior, messages)
+    def __get_intentions(self, messages_conversation, system_behavior):
+        prompt = get_real_prompt(system_behavior, messages_conversation)
         response = openai.ChatCompletion.create(
             model = self.completion_model,
             messages = [
