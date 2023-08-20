@@ -4,11 +4,15 @@ from typing import List
 from ..schemas.message import Message
 
 def get_real_prompt(prompt: str, messages: List[Message]) -> str:
-    message = "["
+    flow_conversation = ""
 
-    for i in messages:
-        message = f'{message}{{ "role": {i.sender}, "content": {i.text} }},'
+    for message in messages:
+        if message.sender == "user": 
+            flow_conversation = f"{flow_conversation}CLIENTE" 
+        else: 
+            flow_conversation = f"{flow_conversation}VENDEDOR"
+        
+        flow_conversation = f"{flow_conversation} - {message.text}\n"
     
-    message = f'{message}]'
 
-    return prompt.replace(JOKER_MESSAGE, message)
+    return prompt.replace(JOKER_MESSAGE, flow_conversation)
